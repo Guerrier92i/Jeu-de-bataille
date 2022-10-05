@@ -6,6 +6,7 @@ class Carte:
     """Initialise couleur (de 1 à 4), et valeur (de 1 à 13)"""
 
     def __init__(self, couleur , valeur):
+        
         self.couleur = couleur
         self.valeur = valeur
 
@@ -47,11 +48,14 @@ class PaquetDeCarte:
         """ permet d'afficher les cartes du paquet 1"""
         for valeur in range(len(paquet_52.contenu)):
             print(paquet_52.contenu[valeur].get_nom() , paquet_52.contenu[valeur].get_couleur())
+            
 
     def afficher_carte1(self):
         """ permet d'afficher les cartes du paquet 1"""
         for valeur in range(len(paquet_1.contenu)):
             print(paquet_1.contenu[valeur].get_nom() , paquet_1.contenu[valeur].get_couleur())
+        if len(paquet_1.contenu) == 0:
+            print("paquet_1 vide")
 
     def afficher_carte2(self):
         """ permet d'afficher les cartes du paquet 2"""
@@ -73,10 +77,12 @@ class PaquetDeCarte:
         print(pack[0].get_nom() ,pack[0].get_couleur() )
 
     def melanger_carte(self):
-        """ permet de melanger le paquet"""
-        random.shuffle(paquet_52.contenu)
+        """ permet de melanger le paquet"""   #permet de mélanger le paquet de manière aléatoire
+        for i in range(3):
+            random.shuffle(paquet_52.contenu)
 
     def distribuer_carte(self):
+        """ distribue les 52 cartes du paquet_52 équitablement dans le paquet_1 et le paquet_2 """
         for i in range(52):
             if 26 >  i :
                 paquet_1.contenu.append((paquet_52.contenu[i]))
@@ -84,21 +90,27 @@ class PaquetDeCarte:
                 paquet_2.contenu.append((paquet_52.contenu[i]))
 
     def distribuer_la_main(self):
-        for i in range(3):
-            la_main.contenu.append(paquet_1.contenu[i])
-            la_main.contenu.append(paquet_2.contenu[i])
+        """ permet d'avoir des cartes dans la main"""
+        la_main.contenu.append(paquet_1.contenu[0])
+        la_main.contenu.append(paquet_2.contenu[0])
 
 
 def affrontement():
-    for valeurs in range(3):
+    """ permet de jouer a la bataille"""                              
+    while not len(paquet_1.contenu) == 0 or len(paquet_2.contenu) == 0 :         # la partie s'arrète lorsque l'un des deux paquets n'est plus de cartes
+        print("-------------------------la_main-------------------------")         
+        la_main.distribuer_la_main()
+        la_main.afficher_main()
         comparer_carte()
-        if paquet_1.contenu[0].valeur > paquet_2.contenu[0].valeur :
+        if paquet_1.contenu[0].valeur > paquet_2.contenu[0].valeur :             # si la valeur de la carte du paquet 1 est plus grande que la carte du paquet 2 alors suprimer la carte de la main et ajouter la carte aux paquet 1
             paquet_1.contenu.append(la_main.contenu[0])
             paquet_1.contenu.append(la_main.contenu[1])
             del(paquet_1.contenu[0])
             del(paquet_2.contenu[0])
-        elif paquet_1.contenu[0].valeur == paquet_2.contenu[0].valeur :
-            if paquet_1.contenu[2].valeur > paquet_2.contenu[2].valeur:
+        elif paquet_1.contenu[0].valeur == paquet_2.contenu[0].valeur :          # si la valeur de la carte des deux paquets est égale
+            if len(paquet_1.contenu) <= 2 or len(paquet_2.contenu) <= 2 :        # Arreter le jeu lorsque qu'il reste deux cartes dans l'un des paquets
+                print("partie terminer")
+            if paquet_1.contenu[2].valeur > paquet_2.contenu[2].valeur:          # tirer la troisième cartes pour les départager
                 for i in range(3):
                     paquet_1.contenu.append(paquet_2.contenu[0])
                     paquet_1.contenu.append(paquet_1.contenu[0])
@@ -117,6 +129,9 @@ def affrontement():
             del(paquet_2.contenu[0])
         del(la_main.contenu[0])
         del (la_main.contenu[0])
+        nombre_carte()
+        if len(paquet_1.contenu) == 0 or len(paquet_2.contenu) == 0 :
+            print("partie terminer")
 
 def comparer_carte():
         """ Renvoie la carte la plus forte"""
@@ -129,6 +144,7 @@ def comparer_carte():
 
 
 def nombre_carte():
+    """ permet de calculer le nombre de carte""" 
     print("paquet_1 nombre de carte :" , len(paquet_1.contenu))
     print("paquet_2 nombre de carte :" , len(paquet_2.contenu))
 
@@ -142,12 +158,8 @@ la_main = PaquetDeCarte()
 paquet_52.remplir()
 paquet_52.melanger_carte()
 paquet_1.distribuer_carte()
-la_main.distribuer_la_main()
-print("-------------------------la_main-------------------------")
-la_main.afficher_main()
 affrontement()
 print("-------------------------paquet_1-------------------------")
 paquet_1.afficher_carte1()
 print("-------------------------paquet_2-------------------------")
 paquet_2.afficher_carte2()
-nombre_carte()
