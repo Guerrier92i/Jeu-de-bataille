@@ -1,3 +1,4 @@
+# Projet de Bataille de MACABRE Mahël TG8 et GAYDU Dénys TG8 NSI/TERMINALE 2022/2023
 from tkinter import*
 import tkinter as tk
 import time
@@ -105,6 +106,11 @@ class PaquetDeCarte:
             print(paquet_1.contenu[valeur].get_nom() , paquet_1.contenu[valeur].get_couleur())
         if len(paquet_1.contenu) == 0:
             print("paquet_1 vide")
+            print("Victoire Du joueur 2")
+        if len(paquet_1.contenu) < 3 and len(paquet_1.contenu) != 0 and paquet_1.contenu[0].valeur == paquet_2.contenu[0].valeur :
+            for valeur in range(len(paquet_1.contenu)):
+                print(paquet_1.contenu[valeur].get_nom() , paquet_1.contenu[valeur].get_couleur())
+            print("Victoire Du joueur 2")
 
     def afficher_carte2(self):
         """ permet d'afficher les cartes du paquet 2"""
@@ -112,6 +118,11 @@ class PaquetDeCarte:
             print(paquet_2.contenu[valeur].get_nom() , paquet_2.contenu[valeur].get_couleur())
         if len(paquet_2.contenu) == 0:
             print("paquet_2 vide")
+            print("Victoire Du joueur 1")
+        if len(paquet_2.contenu) < 3 and len(paquet_2.contenu) != 0 and paquet_1.contenu[0].valeur == paquet_2.contenu[0].valeur :
+            for valeur in range(len(paquet_1.contenu)):
+                print(paquet_2.contenu[valeur].get_nom() , paquet_2.contenu[valeur].get_couleur())
+            print("Victoire Du joueur 1")
 
 
     def tirer_carte(self):
@@ -133,7 +144,7 @@ class PaquetDeCarte:
             #si i est inferieur a 26
             if 26 >  i :
                 paquet_1.contenu.append((paquet_52.contenu[i]))
-            # si i est supérieur ou égal à 26
+            #sinon
             else:
                 paquet_2.contenu.append((paquet_52.contenu[i]))
 
@@ -218,29 +229,32 @@ def comparer_carte():
         #les 2 paquets égaux
         elif paquet_1.contenu[0].valeur == paquet_2.contenu[0].valeur :
             print("La carte du paquet_1 est égale à la carte du paquet_2")
-            if len(paquet_1.contenu) <= 2 :
-                print("nombre de carte du paquet 1 insuffisant")
-            if len(paquet_2.contenu) <= 2 :
-                print("nombre de carte du paquet 2 insuffisant")
-            #paquet 1 superieur carte 3
-            if paquet_1.contenu[2].valeur > paquet_2.contenu[2].valeur :
-                print("La carte N°3 du paquet_1 est supérieur à la carte du paquet_2")
-            #les 2 paquets égaux encore
-            elif paquet_1.contenu[2].valeur == paquet_2.contenu[2].valeur :
-                print("La carte N°5 du paquet_1 est égale à la carte du paquet_2")
-                if  len(paquet_1.contenu) <= 4 :
+            # l'un des 2 paquets a une longeur inférieur a 2
+            if len(paquet_1.contenu) <= 2 or len(paquet_2.contenu) <= 2 :
+                if len(paquet_1.contenu) <= 2 :
                     print("nombre de carte du paquet 1 insuffisant")
-                if  len(paquet_2.contenu) <= 4 :
+                if len(paquet_2.contenu) <= 2 :
                     print("nombre de carte du paquet 2 insuffisant")
-                #paquet 1 superieur carte 5
-                if paquet_1.contenu[2].valeur > paquet_2.contenu[2].valeur :
-                    print("La carte N°5 du paquet_1 est supérieur à la carte du paquet_2")
-                #paquet 2 superieur carte 5
-                else:
-                    print("La carte N°5 du paquet_1 est inférieur à la carte du paquet_2")
-            #paquet 2 superieur carte 3
             else:
-                print("La carte N°3 du paquet_1 est inférieur à la carte du paquet_2")
+                #paquet 1 superieur carte 3
+                if paquet_1.contenu[2].valeur > paquet_2.contenu[2].valeur :
+                    print("La carte N°3 du paquet_1 est supérieur à la carte du paquet_2")
+                #les 2 paquets égaux encore
+                elif paquet_1.contenu[2].valeur == paquet_2.contenu[2].valeur :
+                    print("La carte N°5 du paquet_1 est égale à la carte du paquet_2")
+                    if  len(paquet_1.contenu) <= 4 :
+                        print("nombre de carte du paquet 1 insuffisant")
+                    if  len(paquet_2.contenu) <= 4 :
+                        print("nombre de carte du paquet 2 insuffisant")
+                    #paquet 1 superieur carte 5
+                    if paquet_1.contenu[2].valeur > paquet_2.contenu[2].valeur :
+                        print("La carte N°5 du paquet_1 est supérieur à la carte du paquet_2")
+                    #paquet 2 superieur carte 5
+                    else:
+                        print("La carte N°5 du paquet_1 est inférieur à la carte du paquet_2")
+                #paquet 2 superieur carte 3
+                else:
+                    print("La carte N°3 du paquet_1 est inférieur à la carte du paquet_2")
         #paquet 2 superieur
         else:
             print("La carte du paquet_1 est inférieur à la carte du paquet_2")
@@ -252,6 +266,7 @@ def nombre_carte():
     print("paquet_2 nombre de carte :" , len(paquet_2.contenu))
     
 
+input("AVERTISSEMENT !! SI VOUS N'AVEZ PAS LES CARTES DANS LE MEME DOSSIER QUE LE PROGRAMME , IL RISQUE DE NE PAS FONCTIONNER CORRECTEMENT. APPUYER SUR ENTRER SI TOUT EST OK")
 carte = Carte(1 , 1)
 paquet_52 = PaquetDeCarte()
 paquet_1 = PaquetDeCarte()
