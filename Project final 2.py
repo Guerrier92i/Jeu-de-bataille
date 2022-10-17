@@ -3,7 +3,7 @@ import tkinter as tk
 import time
 import random
 
-VALEURS = ['','As', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'Valet', 'Dame', 'Roi']
+VALEURS = ['','', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'Valet', 'Dame', 'Roi','As']
 COULEURS = ['', 'pique', 'coeur', 'carreau', 'trefle']
 
 class Carte:
@@ -85,7 +85,7 @@ class PaquetDeCarte:
 
     def remplir(self):
         """Remplit le paquet de cartes : en parcourant les couleurs puis les valeurs"""
-        self.contenu = [Carte(couleur, valeur) for couleur in range(1, 5) for valeur in range(1, 14)]
+        self.contenu = [Carte(couleur, valeur) for couleur in range(1, 5) for valeur in range(2, 15)]
 
 
     def get_carte_at(self, pos):
@@ -110,14 +110,8 @@ class PaquetDeCarte:
         """ permet d'afficher les cartes du paquet 2"""
         for valeur in range(len(paquet_2.contenu)):
             print(paquet_2.contenu[valeur].get_nom() , paquet_2.contenu[valeur].get_couleur())
-
-    def afficher_main(self):
-        """ permet d'afficher les cartes de la main"""
-        nombre = 1
-        for valeur in range(len(la_main.contenu)):
-            print(la_main.contenu[valeur].get_nom() , la_main.contenu[valeur].get_couleur() , "carte", nombre)
-            nombre += 1
-        
+        if len(paquet_2.contenu) == 0:
+            print("paquet_2 vide")
 
 
     def tirer_carte(self):
@@ -128,75 +122,126 @@ class PaquetDeCarte:
 
     def melanger_carte(self):
         """ permet de melanger le paquet"""   #permet de mélanger le paquet de manière aléatoire
-        for i in range(10):
+        for i in range(3):
+            random.shuffle(paquet_52.contenu)
             random.shuffle(paquet_52.contenu)
 
     def distribuer_carte(self):
         """ distribue les 52 cartes du paquet_52 équitablement dans le paquet_1 et le paquet_2 """
+        #boucle de 52 tour
         for i in range(52):
+            #si i est inferieur a 26
             if 26 >  i :
                 paquet_1.contenu.append((paquet_52.contenu[i]))
-            if i >= 26  :
+            # si i est supérieur ou égal à 26
+            else:
                 paquet_2.contenu.append((paquet_52.contenu[i]))
-
-    def distribuer_la_main(self):
-        """ permet d'avoir des cartes dans la main"""
-        la_main.contenu.append(paquet_1.contenu[0])
-        la_main.contenu.append(paquet_2.contenu[0])
-
-
-
 
 def affrontement():
     """ permet de jouer a la bataille"""
-    while not len(paquet_1.contenu) == 0 or len(paquet_2.contenu) == 0 :         # la partie s'arrète lorsque l'un des deux paquets n'est plus de cartes
-        print("-------------------------la_main-------------------------")
-        la_main.distribuer_la_main()
-        la_main.afficher_main()
+    conteur = 1
+    while len(paquet_1.contenu) != 0 or len(paquet_2.contenu) != 0 :         # la partie s'arrète lorsque l'un des deux paquets n'est plus de cartes
+        print("-------------------------carte posé-------------------------")
         comparer_carte()
+        print(paquet_1.contenu[0].get_nom() , paquet_1.contenu[0].get_couleur())
+        print(paquet_2.contenu[0].get_nom() , paquet_2.contenu[0].get_couleur())
         if paquet_1.contenu[0].valeur > paquet_2.contenu[0].valeur : # si la valeur de la carte du paquet 1 est plus grande que la carte du paquet 2 alors suprimer la carte de la main et ajouter la carte aux paquet 1
-            paquet_1.contenu.append(la_main.contenu[0])
-            paquet_1.contenu.append(la_main.contenu[1])
-            carte.image()
+            paquet_1.contenu.append(paquet_2.contenu[0])
+            paquet_1.contenu.append(paquet_1.contenu[0])
             del(paquet_1.contenu[0])
             del(paquet_2.contenu[0])
+            #carte.image()
         elif paquet_1.contenu[0].valeur == paquet_2.contenu[0].valeur :          # si la valeur de la carte des deux paquets est égale
-            if len(paquet_1.contenu) <= 2 or len(paquet_2.contenu) <= 2 :        # Arreter le jeu lorsque qu'il reste deux cartes dans l'un des paquets
+            if len(paquet_1.contenu) < 3 or len(paquet_2.contenu) < 3 :        # Arreter le jeu lorsque qu'il reste deux cartes dans l'un des paquets
                 print("partie terminer")
-                carte.image()
-            if paquet_1.contenu[2].valeur > paquet_2.contenu[2].valeur:          # tirer la troisième cartes pour les départager
-                for i in range(3):
-                    paquet_1.contenu.append(paquet_2.contenu[0])
-                    paquet_1.contenu.append(paquet_1.contenu[0])
-                    carte.image()
-                    del(paquet_2.contenu[0])
-                    del(paquet_1.contenu[0])
+                break
+                #carte.image()
             else:
-                for i in range(3):
-                    paquet_2.contenu.append(paquet_2.contenu[0])
-                    paquet_2.contenu.append(paquet_1.contenu[0])
-                    carte.image()
-                    del(paquet_2.contenu[0])
-                    del(paquet_1.contenu[0])
+                print("-------------------------main posé N°2-------------------------")
+                print(paquet_1.contenu[2].get_nom() , paquet_1.contenu[2].get_couleur())
+                print(paquet_2.contenu[2].get_nom() , paquet_2.contenu[2].get_couleur())
+                if paquet_1.contenu[2].valeur > paquet_2.contenu[2].valeur:          # tirer la troisième cartes pour les départager
+                    for i in range(3):
+                        paquet_1.contenu.append(paquet_2.contenu[0])
+                        paquet_1.contenu.append(paquet_1.contenu[0])
+                        del(paquet_2.contenu[0])
+                        del(paquet_1.contenu[0])
+                        #carte.image()
+                elif paquet_1.contenu[2].valeur == paquet_2.contenu[2].valeur :
+                    if len(paquet_1.contenu) < 5 or len(paquet_2.contenu) < 5 :        # Arreter le jeu lorsque qu'il reste deux cartes dans l'un des paquets
+                        print("partie terminer")
+                        break
+                    else:
+                        print("-------------------------main posé N°3-------------------------")
+                        print(paquet_1.contenu[4].get_nom() , paquet_1.contenu[4].get_couleur())
+                        print(paquet_2.contenu[4].get_nom() , paquet_2.contenu[4].get_couleur())
+                        if paquet_1.contenu[4].valeur > paquet_2.contenu[4].valeur:          # tirer la troisième cartes pour les départager
+                            for i in range(6):
+                                paquet_1.contenu.append(paquet_2.contenu[0])
+                                paquet_1.contenu.append(paquet_1.contenu[0])
+                                del(paquet_2.contenu[0])
+                                del(paquet_1.contenu[0])
+                                #carte.image()
+                        else:
+                            for i in range(6):
+                                paquet_2.contenu.append(paquet_1.contenu[0])
+                                paquet_2.contenu.append(paquet_2.contenu[0])
+                                del(paquet_2.contenu[0])
+                                del(paquet_1.contenu[0])
+                                #carte.image()
+                else:
+                    for i in range(3):
+                        paquet_2.contenu.append(paquet_1.contenu[0])
+                        paquet_2.contenu.append(paquet_2.contenu[0])
+                        del(paquet_2.contenu[0])
+                        del(paquet_1.contenu[0])
+                        #carte.image() 
         else:
-            paquet_2.contenu.append(la_main.contenu[0])
-            paquet_2.contenu.append(la_main.contenu[1])
-            carte.image()
+            paquet_2.contenu.append(paquet_1.contenu[0])
+            paquet_2.contenu.append(paquet_2.contenu[0])
             del(paquet_2.contenu[0])
             del(paquet_1.contenu[0])
-        nombre_carte()  
-        del(la_main.contenu[0])
-        del (la_main.contenu[0])
+            #carte.image()
+        nombre_carte()
+        print("tour : " , conteur)
+        conteur += 1
         if len(paquet_1.contenu) == 0 or len(paquet_2.contenu) == 0 :
             print("partie terminer")
+            break
             
 
 def comparer_carte():
         """ Renvoie la carte la plus forte"""
+        #paquet 1 superieur
         if paquet_1.contenu[0].valeur > paquet_2.contenu[0].valeur :
             print("La carte du paquet_1 est supérieur à la carte du paquet_2")
+        #les 2 paquets égaux
         elif paquet_1.contenu[0].valeur == paquet_2.contenu[0].valeur :
             print("La carte du paquet_1 est égale à la carte du paquet_2")
+            if len(paquet_1.contenu) <= 2 :
+                print("nombre de carte du paquet 1 insuffisant")
+            if len(paquet_2.contenu) <= 2 :
+                print("nombre de carte du paquet 2 insuffisant")
+            #paquet 1 superieur carte 3
+            if paquet_1.contenu[2].valeur > paquet_2.contenu[2].valeur :
+                print("La carte N°3 du paquet_1 est supérieur à la carte du paquet_2")
+            #les 2 paquets égaux encore
+            elif paquet_1.contenu[2].valeur == paquet_2.contenu[2].valeur :
+                print("La carte N°5 du paquet_1 est égale à la carte du paquet_2")
+                if  len(paquet_1.contenu) <= 4 :
+                    print("nombre de carte du paquet 1 insuffisant")
+                if  len(paquet_2.contenu) <= 4 :
+                    print("nombre de carte du paquet 2 insuffisant")
+                #paquet 1 superieur carte 5
+                if paquet_1.contenu[2].valeur > paquet_2.contenu[2].valeur :
+                    print("La carte N°5 du paquet_1 est supérieur à la carte du paquet_2")
+                #paquet 2 superieur carte 5
+                else:
+                    print("La carte N°5 du paquet_1 est inférieur à la carte du paquet_2")
+            #paquet 2 superieur carte 3
+            else:
+                print("La carte N°3 du paquet_1 est inférieur à la carte du paquet_2")
+        #paquet 2 superieur
         else:
             print("La carte du paquet_1 est inférieur à la carte du paquet_2")
 
@@ -211,11 +256,9 @@ carte = Carte(1 , 1)
 paquet_52 = PaquetDeCarte()
 paquet_1 = PaquetDeCarte()
 paquet_2 = PaquetDeCarte()
-la_main = PaquetDeCarte()
 paquet_52.remplir()
 paquet_52.melanger_carte()
 paquet_1.distribuer_carte()
-
 affrontement()
 print("-------------------------paquet_1-------------------------")
 paquet_1.afficher_carte1()
