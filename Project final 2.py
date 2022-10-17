@@ -8,7 +8,7 @@ VALEURS = ['','', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'Valet', 'Dame',
 COULEURS = ['', 'pique', 'coeur', 'carreau', 'trefle']
 
 class Carte:
-    """Initialise couleur (de 1 à 4), et valeur (de 1 à 13)"""
+    """Initialise couleur (de 1 à 4), et valeur (de 2 à 15)"""
 
     def __init__(self, couleur , valeur):
 
